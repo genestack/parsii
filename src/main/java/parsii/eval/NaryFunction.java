@@ -50,8 +50,9 @@ public abstract class NaryFunction implements Function {
 
     protected Value evaluate(List<Value> args) {
         int newSize = 1;
+        int size;
         for (Value v : args) {
-            int size = v.values().size();
+            size = v.values().size();
             if (size == 1) {
                 continue;
             }
@@ -74,10 +75,14 @@ public abstract class NaryFunction implements Function {
         }
 
         final List<Double> values = new ArrayList<Double>(newSize);
+        double[] doubleArgs = new double[newArgs.size()];
+        final List<List<Double>> vals = new ArrayList<List<Double>>(newArgs.size());
+        for (Value v : newArgs) {
+            vals.add(v.values());
+        }
         for (int i = 0; i < newSize; i++) {
-            final double[] doubleArgs = new double[newArgs.size()];
-            for (int j = 0; j < newArgs.size(); j++) {
-                doubleArgs[j] = newArgs.get(j).values().get(i);
+            for (int j = 0; j < vals.size(); j++) {
+                doubleArgs[j] = vals.get(j).get(i);
             }
             values.add(eval(doubleArgs));
         }

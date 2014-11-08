@@ -8,13 +8,12 @@
 
 package parsii;
 
+import java.util.*;
+
 import org.junit.Assert;
 import org.junit.Test;
 import parsii.eval.*;
 import parsii.tokenizer.ParseException;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -74,16 +73,40 @@ public class ParserTest {
         b.setValue(new Value(3));
         assertEquals(18d, expr.evaluate().doubleValue(), Functions.EPSILON);
         assertEquals(18d, expr.evaluate().doubleValue(), Functions.EPSILON);
+
         a.setValue(new Value(Arrays.asList(1d, 2d, 3d)));
         b.setValue(new Value(Arrays.asList(1d, 2d, 3d)));
 
-        double[] test = new double[3];
         List<Double> testValues = expr.evaluate().values();
         assertEquals(3, testValues.size());
+
+        double[] test = new double[3];
         for (int i = 0; i < 3; i++) {
             test[i] = testValues.get(i);
         }
         assertArrayEquals(new double[]{7d, 14d, 21d}, test, Functions.EPSILON);
+
+        expr = Parser.parse("log(a/b)", scope);
+        final int BIG_ARRAY_LENGTH = 150000;
+        List<Double> apoints = new ArrayList<Double>(BIG_ARRAY_LENGTH);
+        List<Double> bpoints = new ArrayList<Double>(BIG_ARRAY_LENGTH);
+        double[] logs = new double[BIG_ARRAY_LENGTH];
+        for (int i = 0; i < BIG_ARRAY_LENGTH; i++) {
+            apoints.add(i * 1.0);
+            bpoints.add(i * 1.0 + 100);
+            logs[i] = Math.log10(i * 1.0 / (i * 1.0 + 100));
+        }
+
+        a.setValue(new Value(apoints));
+        b.setValue(new Value(bpoints));
+        testValues = expr.evaluate().values();
+        assertEquals(BIG_ARRAY_LENGTH, testValues.size());
+
+        test = new double[BIG_ARRAY_LENGTH];
+        for (int i = 0; i < BIG_ARRAY_LENGTH; i++) {
+            test[i] = testValues.get(i);
+        }
+        assertArrayEquals(logs, test, Functions.EPSILON);
     }
 
     @Test
