@@ -9,6 +9,7 @@
 package parsii.eval;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Represents an unary function.
@@ -25,9 +26,9 @@ public abstract class UnaryFunction implements Function {
     }
 
     @Override
-    public double eval(List<Expression> args) {
-        double a = args.get(0).evaluate();
-        if (Double.isNaN(a)) {
+    public Value eval(List<Expression> args) {
+        Value a = args.get(0).evaluate();
+        if (Value.isNaN(a)) {
             return a;
         }
         return eval(a);
@@ -40,6 +41,15 @@ public abstract class UnaryFunction implements Function {
      * @return the result of calling the function with a as argument
      */
     protected abstract double eval(double a);
+
+    protected Value eval(Value a) {
+        final List<Double> as = a.values();
+        final List<Double> values = new ArrayList<Double>(as.size());
+        for (Double d : as) {
+            values.add(eval(d));
+        }
+        return new Value(values);
+    }
 
     @Override
     public boolean isNaturalFunction() {

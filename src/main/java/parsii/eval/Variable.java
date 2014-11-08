@@ -23,7 +23,7 @@ package parsii.eval;
  * @since 2013/09
  */
 public class Variable {
-    private double value = 0d;
+    private Value value = new Value(0d);
     private String name;
     private boolean constant = false;
 
@@ -46,7 +46,7 @@ public class Variable {
      * @param value the new value of the variable
      * @throws IllegalStateException if the variable is constant
      */
-    public void setValue(double value) {
+    public void setValue(Value value) {
         if (constant) {
             throw new IllegalStateException(String.format("%s is constant!", name));
         }
@@ -58,7 +58,7 @@ public class Variable {
      *
      * @param value the new (and final) value of this variable
      */
-    public void makeConstant(double value) {
+    public void makeConstant(Value value) {
         setValue(value);
         this.constant = true;
     }
@@ -68,7 +68,7 @@ public class Variable {
      *
      * @return the value previously set or 0 if the variable is not written yet
      */
-    public double getValue() {
+    public Value getValue() {
         return value;
     }
 
@@ -101,7 +101,7 @@ public class Variable {
      * @param value the new value of this variable
      * @return <tt>this</tt> for fluent method calls
      */
-    public Variable withValue(double value) {
+    public Variable withValue(Value value) {
         setValue(value);
         return this;
     }

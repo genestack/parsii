@@ -11,20 +11,19 @@ package parsii.eval;
 /**
  * Represents the result of a parsed expression.
  * <p>
- * Can be evaluated to return a double value. If an error occurs <code>Double.NaN</code> will be returned.
+ * Can be evaluated to return a Value. If an error occurs <code>new Value(Double.NaN)</code> will be returned.
  * </p>
  *
  * @author Andreas Haufler (aha@scireum.de)
  * @since 2013/09
  */
 public abstract class Expression {
-
     /**
-     * Evaluates the expression to a double number.
+     * Evaluates the expression to a Value
      *
-     * @return the double value as a result of evaluating this expression. Returns NaN if an error occurs
+     * @return the value as a result of evaluating this expression. Returns NaN if an error occurs
      */
-    public abstract double evaluate();
+    public abstract Value evaluate();
 
     /**
      * Returns a simplified version of this expression.

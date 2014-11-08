@@ -15,19 +15,19 @@ package parsii.eval;
  * @since 2013/09
  */
 public class Constant extends Expression {
-    private double value;
+    private Value value;
 
     /**
      * Used as dummy expression by the parser if an error occurs while parsing.
      */
-    public static final Constant EMPTY = new Constant(Double.NaN);
+    public static final Constant EMPTY = new Constant(new Value(Double.NaN));
 
-    public Constant(double value) {
+    public Constant(Value value) {
         this.value = value;
     }
 
     @Override
-    public double evaluate() {
+    public Value evaluate() {
         return value;
     }
 

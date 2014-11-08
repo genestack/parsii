@@ -40,7 +40,7 @@ public interface Function {
      *             <tt>getNumberOfArguments</tt>
      * @return the result of the function evaluated with the given arguments
      */
-    double eval(List<Expression> args);
+    Value eval(List<Expression> args);
 
     /**
      * A natural function returns the same output for the same input.

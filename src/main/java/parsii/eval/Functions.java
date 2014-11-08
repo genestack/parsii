@@ -20,6 +20,7 @@ import java.util.List;
  * @since 2013/09
  */
 public class Functions {
+    public static final double EPSILON = 0.0000000001;
 
     /**
      * Provides access to {@link Math#sin(double)}
@@ -72,7 +73,7 @@ public class Functions {
     };
 
     /**
-     * Provides access to {@link Math#tanh(double)}
+     * Provides access to {@link new Math#tanh(double)}
      */
     public static final Function TANH = new UnaryFunction() {
         @Override
@@ -276,12 +277,12 @@ public class Functions {
         }
 
         @Override
-        public double eval(List<Expression> args) {
-            double check = args.get(0).evaluate();
-            if (Double.isNaN(check)) {
+        public Value eval(List<Expression> args) {
+            Value check = args.get(0).evaluate();
+            if (Value.isNaN(check)) {
                 return check;
             }
-            if (check == 1d) {
+            if (check.doubleValue() == 1d) {
                 return args.get(1).evaluate();
             } else {
                 return args.get(2).evaluate();
@@ -291,6 +292,122 @@ public class Functions {
         @Override
         public boolean isNaturalFunction() {
             return false;
+        }
+    };
+
+    public static final Function SUM = new NaryFunction() {
+        @Override
+        protected double eval(double[] vals) {
+            double sum = 0;
+            for (double v : vals) {
+                sum += v;
+            }
+            return sum;
+        }
+    };
+
+    public static final Function PRODUCT = new NaryFunction() {
+        @Override
+        protected double eval(double[] vals) {
+            double prod = 1;
+            for (double v : vals) {
+                prod *= v;
+            }
+            return prod;
+        }
+    };
+
+    public static final Function SUBTRACT = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return a - b;
+        }
+    };
+
+    public static final Function DIVIDE = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return a / b;
+        }
+    };
+
+    public static final Function POW = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return Math.pow(a, b);
+        }
+    };
+
+    public static final Function MODULO = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return a % b;
+        }
+    };
+
+    public static final Function LT = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return a < b ? 1d : 0d;
+        }
+    };
+
+    public static final Function LT_EQ = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return a < b || Math.abs(a - b) < EPSILON ? 1d : 0d;
+        }
+    };
+
+    public static final Function GT = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return a > b ? 1d : 0d;
+        }
+    };
+
+    public static final Function GT_EQ = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return a > b || Math.abs(a - b) < EPSILON ? 1d : 0d;
+        }
+    };
+
+    public static final Function EQ = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return Math.abs(a - b) < EPSILON ? 1d : 0d;
+        }
+    };
+
+    public static final Function NEQ = new BinaryFunction() {
+        @Override
+        protected double eval(double a, double b) {
+            return Math.abs(a - b) > EPSILON ? 1d : 0d;
+        }
+    };
+
+    public static final Function AND = new NaryFunction() {
+        @Override
+        protected double eval(double[] vals) {
+            for (double v : vals) {
+                if (v != 1d) {
+                    return 0d;
+                }
+            }
+            return 1d;
+        }
+    };
+
+    public static final Function OR = new NaryFunction() {
+        @Override
+        protected double eval(double[] vals) {
+            for (double v : vals) {
+                if (v == 1d) {
+                   return 1d;
+                } 
+            }
+            return 0d;
         }
     };
 }

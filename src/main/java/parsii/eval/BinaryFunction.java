@@ -8,7 +8,9 @@
 
 package parsii.eval;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Represents a binary function.
@@ -17,7 +19,7 @@ import java.util.List;
  * @author Andreas Haufler (aha@scireum.de)
  * @since 2013/09
  */
-public abstract class BinaryFunction implements Function {
+public abstract class BinaryFunction extends NaryFunction implements Function {
 
     @Override
     public int getNumberOfArguments() {
@@ -25,16 +27,8 @@ public abstract class BinaryFunction implements Function {
     }
 
     @Override
-    public double eval(List<Expression> args) {
-        double a = args.get(0).evaluate();
-        if (Double.isNaN(a)) {
-            return a;
-        }
-        double b = args.get(1).evaluate();
-        if (Double.isNaN(b)) {
-            return b;
-        }
-        return eval(a, b);
+    protected double eval(double[] args) {
+        return eval(args[0], args[1]);
     }
 
     /**

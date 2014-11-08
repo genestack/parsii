@@ -8,6 +8,9 @@
 
 package parsii.eval;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Represents a binary operation.
  * <p>
@@ -42,12 +45,6 @@ public class BinaryOperation extends Expression {
     private Expression left;
     private Expression right;
     private boolean sealed = false;
-
-    /**
-     * When comparing two double values, those are considered equal, if their difference is lower than the defined
-     * epsilon. This is way better than relying on an exact comparison due to rounding errors
-     */
-    public static final double EPSILON = 0.0000000001;
 
     public BinaryOperation(Op op, Expression left, Expression right) {
         this.op = op;
@@ -116,37 +113,36 @@ public class BinaryOperation extends Expression {
 
 
     @Override
-    public double evaluate() {
-        double a = left.evaluate();
-        double b = right.evaluate();
+    public Value evaluate() {
+        final List<Expression> expr = Arrays.asList(left, right);
         if (op == Op.ADD) {
-            return a + b;
+            return Functions.SUM.eval(expr);
         } else if (op == Op.SUBTRACT) {
-            return a - b;
+            return Functions.SUBTRACT.eval(expr);
         } else if (op == Op.MULTIPLY) {
-            return a * b;
+            return Functions.PRODUCT.eval(expr);
         } else if (op == Op.DIVIDE) {
-            return a / b;
+            return Functions.DIVIDE.eval(expr);
         } else if (op == Op.POWER) {
-            return Math.pow(a, b);
+            return Functions.POW.eval(expr);
         } else if (op == Op.MODULO) {
-            return a % b;
+            return Functions.MODULO.eval(expr);
         } else if (op == Op.LT) {
-            return a < b ? 1 : 0;
+            return Functions.LT.eval(expr);
         } else if (op == Op.LT_EQ) {
-            return a < b || Math.abs(a - b) < EPSILON ? 1 : 0;
+            return Functions.LT_EQ.eval(expr);
         } else if (op == Op.GT) {
-            return a > b ? 1 : 0;
+            return Functions.GT.eval(expr);
         } else if (op == Op.GT_EQ) {
-            return a > b || Math.abs(a - b) < EPSILON ? 1 : 0;
+            return Functions.GT_EQ.eval(expr);
         } else if (op == Op.EQ) {
-            return Math.abs(a - b) < EPSILON ? 1 : 0;
+            return Functions.EQ.eval(expr);
         } else if (op == Op.NEQ) {
-            return Math.abs(a - b) > EPSILON ? 1 : 0;
+            return Functions.NEQ.eval(expr);
         } else if (op == Op.AND) {
-            return a == 1 && b == 1 ? 1 : 0;
+            return Functions.AND.eval(expr);
         } else if (op == Op.OR) {
-            return a == 1 || b == 1 ? 1 : 0;
+            return Functions.OR.eval(expr);
         }
 
         throw new UnsupportedOperationException(String.valueOf(op));
@@ -180,13 +176,15 @@ public class BinaryOperation extends Expression {
                         if (childOp.left.isConstant()) {
                             if (op == Op.ADD) {
                                 return new BinaryOperation(op,
-                                                           new Constant(left.evaluate() + childOp.left.evaluate()),
-                                                           childOp.right);
+                                    new Constant(Functions.SUM.eval(Arrays.asList(left, childOp.left))),
+                                    childOp.right
+                                );
                             }
                             if (op == Op.MULTIPLY) {
                                 return new BinaryOperation(op,
-                                                           new Constant(left.evaluate() * childOp.left.evaluate()),
-                                                           childOp.right);
+                                    new Constant(Functions.PRODUCT.eval(Arrays.asList(left, childOp.left))),
+                                    childOp.right
+                                );
                             }
                         }
                     } else if (childOp.left.isConstant()) {

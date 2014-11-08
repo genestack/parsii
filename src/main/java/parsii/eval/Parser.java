@@ -355,7 +355,7 @@ public class Parser {
     protected Expression atom() {
         if (tokenizer.current().isSymbol("-")) {
             tokenizer.consume();
-            BinaryOperation result = new BinaryOperation(BinaryOperation.Op.SUBTRACT, new Constant(0d), atom());
+            BinaryOperation result = new BinaryOperation(BinaryOperation.Op.SUBTRACT, new Constant(new Value(0d)), atom());
             result.seal();
             return result;
         }
@@ -411,7 +411,7 @@ public class Parser {
                                                               token.getSource())));
                 }
             }
-            return new Constant(value);
+            return new Constant(new Value(value));
         }
         Token token = tokenizer.consume();
         errors.add(ParseError.error(token,

@@ -28,7 +28,7 @@ public class VariableReference extends Expression {
     }
 
     @Override
-    public double evaluate() {
+    public Value evaluate() {
         return var.getValue();
     }
 

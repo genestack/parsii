@@ -22,7 +22,7 @@ public class FunctionCall extends Expression {
     private Function function;
 
     @Override
-    public double evaluate() {
+    public Value evaluate() {
         return function.eval(parameters);
     }
 
