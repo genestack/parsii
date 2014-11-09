@@ -80,7 +80,7 @@ public class ParserTest {
         double[] testValues = expr.evaluate().values();
         assertArrayEquals(new double[]{7d, 14d, 21d}, testValues, Functions.EPSILON);
 
-        expr = Parser.parse("log(a/b)", scope);
+        expr = Parser.parse("if(a<10,log(a/b),log(b/a))", scope);
         final int BIG_ARRAY_LENGTH = 150000;
         double[] apoints = new double[BIG_ARRAY_LENGTH];
         double[] bpoints = new double[BIG_ARRAY_LENGTH];
@@ -88,7 +88,7 @@ public class ParserTest {
         for (int i = 0; i < BIG_ARRAY_LENGTH; i++) {
             apoints[i] = i * 1.0;
             bpoints[i] = i * 1.0 + 100;
-            logs[i] = Math.log10(i * 1.0 / (i * 1.0 + 100));
+            logs[i] = apoints[i] < 10 ? Math.log10(i * 1.0 / (i * 1.0 + 100)) : -Math.log10(i * 1.0 / (i * 1.0 + 100));
         }
 
         a.setValue(new Value(apoints));

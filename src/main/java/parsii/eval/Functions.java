@@ -278,15 +278,27 @@ public class Functions {
 
         @Override
         public Value eval(List<Expression> args) {
-            Value check = args.get(0).evaluate();
-            if (Value.isNaN(check)) {
-                return check;
+            final Value test = args.get(0).evaluate();
+            final double[] testValues = test.values();
+
+            if (testValues.length == 1) {
+                if (Double.isNaN(testValues[0])) {
+                    return test;
+                }
+                return testValues[0] == 1d ? args.get(1).evaluate() : args.get(2).evaluate();
             }
-            if (check.doubleValue() == 1d) {
-                return args.get(1).evaluate();
-            } else {
-                return args.get(2).evaluate();
+
+
+            final double[] first = args.get(1).evaluate().values();
+            final double[] second = args.get(2).evaluate().values();
+
+            double[] result = new double[testValues.length];
+            for (int i = 0; i < testValues.length; i++) {
+                result[i] = testValues[i] == 1d
+                    ? (first.length == 1 ? first[0] : first[i])
+                    : (second.length == 1 ? second[0] : second[i]);
             }
+            return new Value(result);
         }
 
         @Override
