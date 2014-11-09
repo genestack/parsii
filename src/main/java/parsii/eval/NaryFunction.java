@@ -15,9 +15,6 @@ import java.util.List;
 /**
  * Represents an n-ary function.
  * <p>A n-ary function has any number of arguments which are always evaluated in order to compute the final result.</p>
- *
- * @author Andreas Haufler (aha@scireum.de)
- * @since 2013/09
  */
 public abstract class NaryFunction implements Function {
 
