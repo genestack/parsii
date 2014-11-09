@@ -3,18 +3,18 @@ package parsii.eval;
 import java.util.*;
 
 public class Value extends Expression {
-    private final List<Double> values;
+    private final double[] values;
 
-    public Value(List<Double> d) {
-        values = new ArrayList<Double>(d);
+    public Value(double[] values) {
+        this.values = values;
     }
 
     public Value(int value) {
-        values = Collections.singletonList((double)value);
+        this.values = new double[] { (double)value };
     }
 
     public Value(double value) {
-        values = Collections.singletonList(value);
+        this.values = new double[] { value };
     }
 
     @Override
@@ -23,14 +23,14 @@ public class Value extends Expression {
     }
 
     public double doubleValue() {
-        if (values.size() > 1) {
+        if (values.length > 1) {
             throw new RuntimeException("Cannot convert array value to double");
         }
-        return values.get(0).doubleValue();
+        return values[0];
     }
 
-    public List<Double> values() {
-        return new ArrayList<Double>(values);
+    public double[] values() {
+        return values;
     }
 
     public static boolean isNaN(Value value) {
@@ -41,7 +41,6 @@ public class Value extends Expression {
         }
         return true;
     }
-
 
     public String toString() {
         return values().toString();

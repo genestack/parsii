@@ -8,9 +8,9 @@
 
 package parsii.eval;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents an n-ary function.
@@ -52,7 +52,7 @@ public abstract class NaryFunction implements Function {
         int newSize = 1;
         int size;
         for (Value v : args) {
-            size = v.values().size();
+            size = v.values().length;
             if (size == 1) {
                 continue;
             }
@@ -67,26 +67,28 @@ public abstract class NaryFunction implements Function {
 
         final List<Value> newArgs = new ArrayList<Value>(args.size());
         for (Value v : args) {
-            if (v.values().size() == 1) {
-                newArgs.add(new Value(Collections.nCopies(newSize, v.values().get(0))));
+            if (v.values().length == 1) {
+                final double[] fill = new double[newSize];
+                Arrays.fill(fill, v.values()[0]);
+                newArgs.add(new Value(fill));
             } else {
                 newArgs.add(v);
             }
         }
 
-        final List<Double> values = new ArrayList<Double>(newSize);
-        double[] doubleArgs = new double[newArgs.size()];
-        final List<List<Double>> vals = new ArrayList<List<Double>>(newArgs.size());
+        final double[] result = new double[newSize];
+        final double[] doubleArgs = new double[newArgs.size()];
+        final List<double[]> vals = new ArrayList<double[]>(newArgs.size());
         for (Value v : newArgs) {
             vals.add(v.values());
         }
         for (int i = 0; i < newSize; i++) {
             for (int j = 0; j < vals.size(); j++) {
-                doubleArgs[j] = vals.get(j).get(i);
+                doubleArgs[j] = vals.get(j)[i];
             }
-            values.add(eval(doubleArgs));
+            result[i] = eval(doubleArgs);
         }
-        return new Value(values);
+        return new Value(result);
     }
 
     @Override

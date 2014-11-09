@@ -43,12 +43,13 @@ public abstract class UnaryFunction implements Function {
     protected abstract double eval(double a);
 
     protected Value eval(Value a) {
-        final List<Double> as = a.values();
-        final List<Double> values = new ArrayList<Double>(as.size());
+        final double[] as = a.values();
+        final double[] result = new double[as.length];
+        int i = 0;
         for (Double d : as) {
-            values.add(eval(d));
+            result[i++] = eval(d);
         }
-        return new Value(values);
+        return new Value(result);
     }
 
     @Override
