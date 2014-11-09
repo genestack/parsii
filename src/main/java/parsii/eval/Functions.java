@@ -20,6 +20,10 @@ import java.util.List;
  * @since 2013/09
  */
 public class Functions {
+    /**
+     * When comparing two double values, those are considered equal, if their difference is lower than the defined
+     * epsilon. This is way better than relying on an exact comparison due to rounding errors
+     */
     public static final double EPSILON = 0.0000000001;
 
     /**
