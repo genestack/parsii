@@ -43,6 +43,16 @@ public class Value extends Expression {
     }
 
     public String toString() {
-        return values().toString();
+        final StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        boolean first = true;
+        for (double d : values()) {
+            if (!first) {
+                sb.append(", ");
+            }
+            sb.append(d);
+            first = false;
+        }
+        return sb.append("]").toString();
     }
 }
