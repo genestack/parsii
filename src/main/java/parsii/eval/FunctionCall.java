@@ -39,6 +39,10 @@ public class FunctionCall extends Expression {
         return new Constant(evaluate());
     }
 
+    public Function getFunction() {
+        return function;
+    }
+
     /**
      * Sets the function to evaluate.
      *
