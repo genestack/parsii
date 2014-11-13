@@ -413,6 +413,10 @@ public class Parser {
             }
             return new Constant(new Value(value));
         }
+        if (tokenizer.current().isString()) {
+            String value = tokenizer.consume().getContents();
+            return new Constant(new Value(value));
+        }
         Token token = tokenizer.consume();
         errors.add(ParseError.error(token,
                                     String.format("Unexpected token: '%s'. Expected an expression.",

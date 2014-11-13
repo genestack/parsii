@@ -98,6 +98,41 @@ public class ParserTest {
     }
 
     @Test
+    public void stringValue() throws ParseException {
+        Parser.registerFunction("count_occurrences", new Function() {
+            @Override
+            public int getNumberOfArguments() {
+                return 2;
+            }
+
+            @Override
+            public Value eval(List<Expression> args) {
+                final String first = args.get(0).evaluate().stringValue();
+                final String second = args.get(1).evaluate().stringValue();
+
+                int lastIndex = 0;
+                int count = 0;
+
+                while (lastIndex != -1) {
+                    lastIndex = first.indexOf(second, lastIndex);
+                    if (lastIndex != -1) {
+                        count++;
+                        lastIndex += second.length();
+                    }
+                }
+
+                return new Value(count);
+            }
+
+            @Override
+            public boolean isNaturalFunction() {
+                return true;
+            }
+        });
+        assertEquals(3d, Parser.parse("count_occurrences(\"blablabla\",'bla')").evaluate().doubleValue(), Functions.EPSILON);
+    }
+
+    @Test
     public void functions() throws ParseException {
         assertEquals(0d, Parser.parse("1 + sin(-pi) + cos(pi)").evaluate().doubleValue(), Functions.EPSILON);
         assertEquals(4.72038341576d, Parser.parse("tan(sqrt(euler ^ (pi * 3)))").evaluate().doubleValue(), Functions.EPSILON);
