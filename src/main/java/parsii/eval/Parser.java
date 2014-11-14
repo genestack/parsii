@@ -15,10 +15,7 @@ import parsii.tokenizer.Tokenizer;
 
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Parses a given mathematical expression into an abstract syntax tree which can be evaluated.
@@ -64,6 +61,10 @@ public class Parser {
      */
     public static void registerFunction(String name, Function function) {
         functionTable.put(name, function);
+    }
+
+    public static Map<String,Function> registeredFunctions() {
+        return new HashMap<String,Function>(functionTable);
     }
 
     /*
