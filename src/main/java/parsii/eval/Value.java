@@ -1,23 +1,24 @@
 package parsii.eval;
 
-import java.util.*;
-
 public class Value extends Expression {
     private final double[] doubleValues;
     private final String stringValue;
 
     public Value(double[] values) {
+        if (values.length == 0) {
+            throw new IllegalArgumentException("Empty values array is not supported");
+        }
         this.doubleValues = values;
         this.stringValue = null;
     }
 
     public Value(int value) {
-        this.doubleValues = new double[] { (int)value };
+        this.doubleValues = new double[] {value};
         this.stringValue = null;
     }
 
     public Value(double value) {
-        this.doubleValues = new double[] { value };
+        this.doubleValues = new double[] {value};
         this.stringValue = null;
     }
 
@@ -36,7 +37,7 @@ public class Value extends Expression {
     }
 
     public double doubleValue() {
-        if (doubleValues != null && doubleValues.length > 1) {
+        if (doubleValues.length > 1) {
             throw new RuntimeException("Cannot convert array value to double");
         }
         return doubleValues[0];
@@ -46,11 +47,11 @@ public class Value extends Expression {
         return doubleValues;
     }
 
-    public static boolean isNaN(Value value) {
-        if (value.stringValue != null) {
+    public boolean isNaN() {
+        if (stringValue != null) {
             return true;
         }
-        for (Double d : value.values()) {
+        for (double d : doubleValues) {
             if (!Double.isNaN(d)) {
                 return false;
             }

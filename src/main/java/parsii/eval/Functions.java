@@ -77,7 +77,7 @@ public class Functions {
     };
 
     /**
-     * Provides access to {@link new Math#tanh(double)}
+     * Provides access to {@link Math#tanh(double)}
      */
     public static final Function TANH = new UnaryFunction() {
         @Override
@@ -283,21 +283,28 @@ public class Functions {
         @Override
         public Value eval(List<Expression> args) {
             final Value test = args.get(0).evaluate();
+            // TODO: what if `test` is NaN???
             final double[] testValues = test.values();
 
             if (testValues.length == 1) {
                 if (Double.isNaN(testValues[0])) {
+                    // Can we always return a 1-dimensional NaN even for an unknown output Value size? Seems yes, we can.
                     return test;
                 }
+                // TODO: why do we compare " == 1" instead of " != 0"???
                 return testValues[0] == 1d ? args.get(1).evaluate() : args.get(2).evaluate();
             }
 
 
+            // TODO: Why don't we test for `evaluate().isNaN()` here?!
+            // TODO: If I have all test items equal to "1" (or all test items are either NaN or "1") then I would expect the third Expression being not calculated;
+            // TODO: If I have all test items equal to "0" (or all test items are either NaN or "0") then I would expect the second Expression being not calculated;
             final double[] first = args.get(1).evaluate().values();
             final double[] second = args.get(2).evaluate().values();
 
             double[] result = new double[testValues.length];
             for (int i = 0; i < testValues.length; i++) {
+                // TODO: Why don't we test `testValues[i]` for NaN here?!
                 result[i] = testValues[i] == 1d
                     ? (first.length == 1 ? first[0] : first[i])
                     : (second.length == 1 ? second[0] : second[i]);

@@ -8,14 +8,11 @@
 
 package parsii.eval;
 
-import parsii.tokenizer.ParseError;
-import parsii.tokenizer.ParseException;
-import parsii.tokenizer.Token;
-import parsii.tokenizer.Tokenizer;
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.*;
+
+import parsii.tokenizer.*;
 
 /**
  * Parses a given mathematical expression into an abstract syntax tree which can be evaluated.
@@ -98,6 +95,8 @@ public class Parser {
         registerFunction("rnd", Functions.RND);
         registerFunction("sign", Functions.SIGN);
         registerFunction("if", Functions.IF);
+
+        // TODO: Why we do not register here SUM, PRODUCT and other functions that go after IF function???
     }
 
     /**

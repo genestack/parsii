@@ -8,10 +8,6 @@
 
 package parsii.eval;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-
 /**
  * Represents a binary function.
  * <p>A binary function has two arguments which are always evaluated in order to compute the final result.</p>
@@ -28,6 +24,7 @@ public abstract class BinaryFunction extends NaryFunction implements Function {
 
     @Override
     protected double eval(double[] args) {
+        // TODO: Why did you remove NaN checks from here??? You did not even added them to Nary function.
         return eval(args[0], args[1]);
     }
 

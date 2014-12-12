@@ -28,7 +28,7 @@ public abstract class NaryFunction implements Function {
         final List<Value> values = new ArrayList<Value>(args.size());
         for (Expression e : args) {
             Value a = e.evaluate();
-            if (Value.isNaN(a)) {
+            if (a.isNaN()) {
                 return a;
             }
             values.add(a);
@@ -39,32 +39,31 @@ public abstract class NaryFunction implements Function {
     /**
      * Performs the computation of the n-ary function
      *
-     * @param a the first argument of the function
-     * @param b the second argument of the function
-     * @return the result of calling the function with a and b
+     * @param args    function arguments
+     * @return the result of calling the function with arguments
      */
-    protected abstract double eval(double[] b);
+    protected abstract double eval(double[] args);
 
     protected Value evaluate(List<Value> args) {
         int newSize = 1;
-        int size;
         for (Value v : args) {
-            size = v.values().length;
+            // TODO: Why don't we check for NaN here???
+            // If you say, that eval(List<Expression>) checks that, then make the current method `private`.
+            final int size = v.values().length;
             if (size == 1) {
                 continue;
             }
             if (newSize == 1) {
                 newSize = size;
-            } else {
-                if (newSize != size) {
-                    throw new RuntimeException("Cannot operate on list values of unequal lengths!");
-                }
+            } else if (newSize != size) {
+                throw new RuntimeException("Cannot operate on list values of unequal lengths!");
             }
         }
 
+        // TODO: remove `newArgs` list: `args` list is more than enough
         final List<Value> newArgs = new ArrayList<Value>(args.size());
         for (Value v : args) {
-            if (v.values().length == 1) {
+            if (v.values().length == 1 && newSize > 1) {
                 final double[] fill = new double[newSize];
                 Arrays.fill(fill, v.values()[0]);
                 newArgs.add(new Value(fill));
@@ -75,12 +74,15 @@ public abstract class NaryFunction implements Function {
 
         final double[] result = new double[newSize];
         final double[] doubleArgs = new double[newArgs.size()];
+        // TODO: remove `vals` list: `args` list if more than enough
         final List<double[]> vals = new ArrayList<double[]>(newArgs.size());
         for (Value v : newArgs) {
+            // TODO: Why don't we check for NaN here???
             vals.add(v.values());
         }
         for (int i = 0; i < newSize; i++) {
             for (int j = 0; j < vals.size(); j++) {
+                // TODO: Why don't we check for NaN here??? Or we assume "eval(double[])" will do these checks?
                 doubleArgs[j] = vals.get(j)[i];
             }
             result[i] = eval(doubleArgs);
