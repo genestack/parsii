@@ -58,9 +58,11 @@ public class Scope {
      */
     private static Scope getRootScope() {
         if (root == null) {
-            root = new Scope();
-            root.getVariable("pi").makeConstant(new Value(Math.PI));
-            root.getVariable("euler").makeConstant(new Value(Math.E));
+            synchronized (Scope.class) {
+                root = new Scope();
+                root.getVariable("pi").makeConstant(new Value(Math.PI));
+                root.getVariable("euler").makeConstant(new Value(Math.E));
+            }
         }
 
         return root;
