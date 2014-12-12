@@ -3,6 +3,7 @@ package parsii.eval;
 public class Value extends Expression {
     private final double[] doubleValues;
     private final String stringValue;
+    private Boolean isNaNCached;
 
     public Value(double[] values) {
         if (values.length == 0) {
@@ -15,16 +16,19 @@ public class Value extends Expression {
     public Value(int value) {
         this.doubleValues = new double[] {value};
         this.stringValue = null;
+        this.isNaNCached = false;
     }
 
     public Value(double value) {
         this.doubleValues = new double[] {value};
         this.stringValue = null;
+        this.isNaNCached = Double.isNaN(value);
     }
 
     public Value(String value) {
         this.doubleValues = null;
         this.stringValue = value;
+        this.isNaNCached = true;
     }
 
     @Override
@@ -48,6 +52,13 @@ public class Value extends Expression {
     }
 
     public boolean isNaN() {
+        if (isNaNCached == null) {
+            isNaNCached = isNaNInternal();
+        }
+        return isNaNCached;
+    }
+
+    private boolean isNaNInternal() {
         if (stringValue != null) {
             return true;
         }
